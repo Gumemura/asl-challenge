@@ -121,6 +121,30 @@
     :start (jt/local-date 2024 04 25)
     :end (jt/local-date 2024 04 28)}])
 
+(def ^:private test-case-06
+  "One overlaps all"
+  [{:event-name "event 00"
+    :start (jt/local-date 2024 04 1)
+    :end (jt/local-date 2024 04 30)}
+   {:event-name "event 01"
+    :start (jt/local-date 2024 04 3)
+    :end (jt/local-date 2024 04 5)}
+   {:event-name "event 02"
+    :start (jt/local-date 2024 04 6)
+    :end (jt/local-date 2024 04 8)}
+   {:event-name "event 03"
+    :start (jt/local-date 2024 04 8)
+    :end (jt/local-date 2024 04 10)}
+   {:event-name "event 04"
+    :start (jt/local-date 2024 04 11)
+    :end (jt/local-date 2024 04 14)}
+   {:event-name "event 05"
+    :start (jt/local-date 2024 04 18)
+    :end (jt/local-date 2024 04 20)}
+   {:event-name "event 06"
+    :start (jt/local-date 2024 04 25)
+    :end (jt/local-date 2024 04 28)}])
+
 (facts "Test overlapping-events function"
   (fact "Test overlapping for generic case 00"
     (overlapping-events test-case-00) =>
@@ -165,4 +189,19 @@
     (just (just [(contains {:event-name "event 00"})
                  (contains {:event-name "event 01"})] :in-any-order)
           (just [(contains {:event-name "event 02"})
-                 (contains {:event-name "event 03"})] :in-any-order))))
+                 (contains {:event-name "event 03"})] :in-any-order)))
+
+    (fact "Test overlapping for case 06: one overlaps all"
+    (overlapping-events test-case-06) =>
+    (just  (just [(contains {:event-name "event 00"})
+                  (contains {:event-name "event 01"})] :in-any-order)
+           (just [(contains {:event-name "event 00"})
+                  (contains {:event-name "event 02"})] :in-any-order)
+           (just [(contains {:event-name "event 00"})
+                  (contains {:event-name "event 03"})] :in-any-order)
+           (just [(contains {:event-name "event 00"})
+                  (contains {:event-name "event 04"})] :in-any-order)
+           (just [(contains {:event-name "event 00"})
+                  (contains {:event-name "event 05"})] :in-any-order)
+           (just [(contains {:event-name "event 00"})
+                  (contains {:event-name "event 06"})] :in-any-order))))
